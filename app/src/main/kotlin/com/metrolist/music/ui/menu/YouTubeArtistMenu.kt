@@ -62,7 +62,8 @@ fun YouTubeArtistMenu(
     val isGuest = listenTogetherManager?.isInRoom == true && !listenTogetherManager.isHost
     val isPinned by database.speedDialDao.isPinned(artist.id).collectAsStateWithLifecycle(initialValue = false)
     val coroutineScope = rememberCoroutineScope()
-
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val accountName by homeViewModel.accountName.collectAsStateWithLifecycle()
     YouTubeListItem(
         item = artist,
         trailingContent = {},
@@ -164,6 +165,7 @@ fun YouTubeArtistMenu(
             Material3MenuGroup(
                 items = listOf(
                     Material3MenuItemData(
+                        enabled = (libraryArtist?.artist?.title != accountName)
                         title = {
                             Text(text = if (libraryArtist?.artist?.bookmarkedAt != null) stringResource(R.string.subscribed) else stringResource(R.string.subscribe))
                         },
